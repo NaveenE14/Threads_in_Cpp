@@ -1,11 +1,11 @@
-/*  * 
+/*  *
 * 1. What do you understand by thread and give one example in C++?
 
 ANSWER
 0. In every application there is a default thread which is main(), in side this we create other threads.
-1. A thread is also known as lightweight process. Idea is achieve parallelism by dividing a process into multiple threads. 
+1. A thread is also known as lightweight process. Idea is achieve parallelism by dividing a process into multiple threads.
    For example:
-   (a) The browser has multiple tabs that can be different threads. 
+   (a) The browser has multiple tabs that can be different threads.
    (b) MS Word must be using multiple threads, one thread to format the text, another thread to process inputs (spell checker)
    (c) Visual Studio code editor would be using threading for auto completing the code. (Intellicence)
 
@@ -16,7 +16,7 @@ ANSWER
 4. Member Functions
 5. Static Member functions
 
-If we create multiple threads at the same time, it doesn't guarantee which one will start first 
+If we create multiple threads at the same time, it doesn't guarantee which one will start first
 
 
 * JOIN NOTES
@@ -26,12 +26,12 @@ If we create multiple threads at the same time, it doesn't guarantee which one w
 
 *DETACH NOTES
 0. This is used to detach newly created thread from the parent thread.
-1. Always check before detaching a thread that it is joinable otherwise we may end up double detaching and 
+1. Always check before detaching a thread that it is joinable otherwise we may end up double detaching and
    double detach() will result into program termination.
 2. If we have detached thread and main function is returning then the detached thread execution is suspended.
 
 NOTES:
-Either join() or detach() should be called on thread object, otherwise during thread object�s destructor it will 
+Either join() or detach() should be called on thread object, otherwise during thread object�s destructor it will
 terminate the program. Because inside destructor it checks if thread is still joinable? if yes then it terminates the program.
 
 * Mutex: Mutual Exclusion
@@ -44,7 +44,7 @@ MUTEX:
 0. Mutex is used to avoid race condition.
 1. We use lock() , unlock() on mutex to avoid race condition.
 
-*  try_lock 
+*  try_lock
 0. try_lock() Tries to lock the mutex. Returns immediately. On successful lock acquisition returns true otherwise returns false.
 1. If try_lock() is not able to lock mutex, then it doesn't get blocked that's why it is called non-blocking.
 2. If try_lock is called again by the same thread which owns the mutex, the behaviour is undefined.
@@ -61,7 +61,7 @@ There are so many try_lock function
 8. std::shared_timed_mutex::try_lock
 9. std::recursive_timed_mutex::try_lock
 
-* try_lock 
+* try_lock
 0. std::try_lock() tries to lock all the mutex passed in it one by one in given order.
 1. On success this function returns -1 otherwise it will return 0-based mutex index number which it could not lock.
 2. If it fails to lock any of the mutex then it will release all the mutex it locked before.
@@ -69,23 +69,23 @@ There are so many try_lock function
 
 *Timed Mutex
 few points to remember about  timed mutex is as follows:
-0. std::timed_mutex is blocked till timeout_time or the lock is acquired and returns true if success 
+0. std::timed_mutex is blocked till timeout_time or the lock is acquired and returns true if success
    otherwise false.
 1. Member Function:
-   a. lock 
+   a. lock
    b. try_lock
    c. try_lock_for    ---\ These two functions makes it different from mutex.
-   d. try_lock_until  ---/ 
+   d. try_lock_until  ---/
    e. unlock
 
 EXAMPLE: try_lock_for();
 Waits until specified timeout_duration has elapsed or the lock is acquired, whichever comes first.
 On successful lock acquisition returns true, otherwise returns false.
 
-* Recursive Mutux 
+* Recursive Mutux
 Few points to remember about recursive mutex is as follows:
 0. It is same as mutex but, Same thread can lock one mutex multiple times using recursive_mutex.
-1. If thread T1 first call lock/try_lock on recursive mutex m1, then m1 is locked by T1, now 
+1. If thread T1 first call lock/try_lock on recursive mutex m1, then m1 is locked by T1, now
    as T1 is running in recursion T1 can call lock/try_lock any number of times there is no issue.
 2. But if T1 have acquired 10 times lock/try_lock on mutex m1 then thread T1 will have to unlock
    it 10 times otherwise no other thread will be able to lock mutex m1.
@@ -105,14 +105,14 @@ BOTTOM LINE:
 3. You can not explicitly unlock the lock_guard.
 4. You can not copy lock_guard.
 
-* unique lock 
+* unique lock
 1. The class unique_lock is a mutex ownership wrapper.
 2. It Allows:
-    a. Can Have Different Locking Strategies
-    b. time-constrained attempts at locking (try_lock_for, try_lock_until)
-    c. recursive locking
-    d. transfer of lock ownership (move not copy)
-    e. condition variables. (See this in coming videos)
+	a. Can Have Different Locking Strategies
+	b. time-constrained attempts at locking (try_lock_for, try_lock_until)
+	c. recursive locking
+	d. transfer of lock ownership (move not copy)
+	e. condition variables. (See this in coming videos)
 
 Locking Strategies
    TYPE           EFFECTS(S)
@@ -120,7 +120,7 @@ Locking Strategies
 2. try_to_lock  try to acquire ownership of the mutex without blocking.
 3. adopt_lock  assume the calling thread already has ownership of the mutex.
 
-* condition variables 
+* condition variables
 ? used for synchronization of two or more threads
 1. Condition variables allow us to synchronise threads via notifications.
    a. notify_one();
@@ -129,40 +129,40 @@ Locking Strategies
 3. Condition variable is used to synchronise two or more threads.
 4. Best use case of condition variable is Producer/Consumer problem.
 5. Condition variables can be used for two purposes:
-    a. Notify other threads
-    b. Wait for some condition
+	a. Notify other threads
+	b. Wait for some condition
 
 
-* Thread OR Process Synchronisation" 
+* Thread OR Process Synchronisation"
 1.0 Thread Or Process synchronize to access critical section.
 2.0 Critical section is one or collection of program statements which should be executed by only one thread or process at a time.
 
 * std::lock(m1, m2, m3, m4);
 1. All arguments are locked via a sequence of calls to lock(),  try_lock(), or unlock() on each argument.
 2. Order of locking is not defined (it will try to lock provided mutex in any order and ensure that
-    there is no deadlock).
+	there is no deadlock).
 3. It is a blocking call.
 
 [Example:0] -- No deadlock.
-    Thread 1                    Thread 2
-    std::lock(m1,m2);           std::lock(m1,m2);
+	Thread 1                    Thread 2
+	std::lock(m1,m2);           std::lock(m1,m2);
 
-[Example:1] -- No deadlock. 
+[Example:1] -- No deadlock.
 
-    Thread 1                    Thread 2
-    std::lock(m1, m2);          std::lock(m2, m1);
+	Thread 1                    Thread 2
+	std::lock(m1, m2);          std::lock(m2, m1);
 
-[Example:2] -- No deadlock. 
+[Example:2] -- No deadlock.
 
-    Thread 1                    Thread 2
-    std::lock(m1, m2, m3, m4);  std::lock(m3, m4);
-                                std::lock(m1, m2);
+	Thread 1                    Thread 2
+	std::lock(m1, m2, m3, m4);  std::lock(m3, m4);
+								std::lock(m1, m2);
 
-[Example:3] -- Yes, the below can deadlock. 
+[Example:3] -- Yes, the below can deadlock.
 
-    Thread 1                    Thread 2
-    std::lock(m1,m2);           std::lock(m3,m4);
-    std::lock(m3,m4);           std::lock(m1,m2);
+	Thread 1                    Thread 2
+	std::lock(m1,m2);           std::lock(m3,m4);
+	std::lock(m3,m4);           std::lock(m1,m2);
 
 
 *std::promise and std::future and how they work together to synchronise threads.
@@ -171,10 +171,10 @@ Basically std::promise is sent to the called thread and once the value is ready 
 *async
 * three different launch policy for creating task using std::async are as follows:
 1. std::launch::async
-2. std::launch::deffered // Os is overloaded, without a thread , kind of a blocking call 
+2. std::launch::deffered // Os is overloaded, without a thread , kind of a blocking call
 3. std::launch::async | std::launch::deffered // based on
 
-With the help of above policies std::async decides to create task as asynchronous or synchronous. 
+With the help of above policies std::async decides to create task as asynchronous or synchronous.
 ? HOW IT WORKS:
 1. It automatically creates a thread (Or picks from internal thread pool) and a promise object for us.
 2. Then passes the std::promise object to thread function and returns the associated std::future object.
@@ -196,7 +196,7 @@ PRODUCER thread steps:
  1. lock mutex, if success then go ahead otherwise wait for mutex to get free.
  2. check if buffer is full and if it is full then unlock mutex and sleep, if not then go ahead and produce.
  3. insert item in buffer.
- 4. unlock mutex. 
+ 4. unlock mutex.
  5. notify consumer.
 
 ? CONSUMER thread steps:
@@ -223,7 +223,7 @@ PRODUCER thread steps:
 ! static variables are not thread safe
 
 * If we want to safeguard a resource from multiple access of threads then go with mutex
-*If we want to synchronize threads , then go with semaphores 
+*If we want to synchronize threads , then go with semaphores
 
 *Scoped Lock
 A scoped_lock in C++ is a mechanism provided by the C++ Standard Library's threading support (such as the mutex header) for managing mutual exclusion in multi-threaded applications. Here's a summary of scoped_lock:
@@ -254,28 +254,34 @@ typedef unsigned long long ull;
 using namespace std;
 using namespace std::chrono;
 
-
-
-ull oddSum=0;
-ull evenSum=0;
-void findOdd(ull start,ull end){
-	for(ull i=start;i<=end;i++){
-		if((i&1)==1){
-			oddSum+=i;
+ull oddSum = 0;
+ull evenSum = 0;
+void findOdd(ull start, ull end)
+{
+	for (ull i = start; i <= end; i++)
+	{
+		if ((i & 1) == 1)
+		{
+			oddSum += i;
 		}
 	}
 }
-void findEven(ull start,ull end){
-	for(ull i=start ;i<=end ;i++){
-		if((i&1)==1){
-			evenSum+=i;
+void findEven(ull start, ull end)
+{
+	for (ull i = start; i <= end; i++)
+	{
+		if ((i & 1) == 1)
+		{
+			evenSum += i;
 		}
 	}
 }
 
-void fun(int x){
-	while(x-- > 0){
-		cout<<x<<endl;
+void fun(int x)
+{
+	while (x-- > 0)
+	{
+		cout << x << endl;
 	}
 }
 // functor (function object)
@@ -307,167 +313,202 @@ public:
 	}
 }; */
 
-void run(int count){
-	while(count-->0){
-		cout<<"Cpp"<<endl;
+void run(int count)
+{
+	while (count-- > 0)
+	{
+		cout << "Cpp" << endl;
 	}
-	//this_thread::sleep_for(chrono::seconds(3));
-	cout<<"thread finsihed"<<endl;
+	// this_thread::sleep_for(chrono::seconds(3));
+	cout << "thread finsihed" << endl;
 }
 // mutex
-int myAmount =0;
+int myAmount = 0;
 mutex m;
-void addMoney(){
+void addMoney()
+{
 	m.lock();
-	++myAmount; // critical section 
+	++myAmount; // critical section
 	m.unlock();
 }
-//try_lock
-int counter=0;
+// try_lock
+int counter = 0;
 mutex m1;
-void increaseTheCounter() {
-	for(int i=0;i<100000;i++){
-		if(m1.try_lock()){
+void increaseTheCounter()
+{
+	for (int i = 0; i < 100000; i++)
+	{
+		if (m1.try_lock())
+		{
 			counter++;
 			m1.unlock();
 		}
 	}
 }
-//try_lock 
-mutex m2,m3;
-int X=0,Y=0;
+// try_lock
+mutex m2, m3;
+int X = 0, Y = 0;
 void doSomeWorkForSeconds(int seconds) { this_thread::sleep_for(std::chrono::seconds(seconds)); }
-void incrementXY(int& XorY, mutex& m, const char* desc) {
-    for(int i=0; i<5; ++i){
-        m.lock();
-            ++XorY;
-        cout << desc << XorY << '\n';
-        m.unlock();
-        doSomeWorkForSeconds(1);
-    }
-} // while this thread sleep , consumeXY will fill the bucket 
-void consumeXY () {
-    int useCount = 5;
-    int XplusY = 0;
-    while(1){
-        int lockResult = try_lock(m1,m2);
-        if(lockResult == -1){ // lock successful
-            if(X!=0 && Y!=0){
-                --useCount;
-                XplusY+=X+Y; // bucket example
-                X = 0;
-                Y = 0;
-                cout << "XplusY " << XplusY << '\n';
-            }
-            m1.unlock();
-            m2.unlock();
-            if(useCount == 0) break;
-        }
-    }
+void incrementXY(int &XorY, mutex &m, const char *desc)
+{
+	for (int i = 0; i < 5; ++i)
+	{
+		m.lock();
+		++XorY;
+		cout << desc << XorY << '\n';
+		m.unlock();
+		doSomeWorkForSeconds(1);
+	}
+} // while this thread sleep , consumeXY will fill the bucket
+void consumeXY()
+{
+	int useCount = 5;
+	int XplusY = 0;
+	while (1)
+	{
+		int lockResult = try_lock(m1, m2);
+		if (lockResult == -1)
+		{ // lock successful
+			if (X != 0 && Y != 0)
+			{
+				--useCount;
+				XplusY += X + Y; // bucket example
+				X = 0;
+				Y = 0;
+				cout << "XplusY " << XplusY << '\n';
+			}
+			m1.unlock();
+			m2.unlock();
+			if (useCount == 0)
+				break;
+		}
+	}
 }
 
-// * Timed Mutex 
-int myAmount2=0;
+// * Timed Mutex
+int myAmount2 = 0;
 timed_mutex m4;
-void increment(int i) {
-    if(m4.try_lock_for(std::chrono::seconds(2))){  // wait for unlock
-        ++myAmount2;
-        this_thread::sleep_for (seconds(1));
-        cout << "Thread " << i << " Entered" << endl;
-        m4.unlock();
-    }else{
-        cout << "Thread " << i << " Couldn't Enter" << endl;
-    }
+void increment(int i)
+{
+	if (m4.try_lock_for(std::chrono::seconds(2)))
+	{ // wait for unlock
+		++myAmount2;
+		this_thread::sleep_for(seconds(1));
+		cout << "Thread " << i << " Entered" << endl;
+		m4.unlock();
+	}
+	else
+	{
+		cout << "Thread " << i << " Couldn't Enter" << endl;
+	}
 }
 
 // Recursive Mutex
-int buffer=0;
+int buffer = 0;
 recursive_mutex m5;
-void recursion(char c,int loopFor){
-	if(loopFor<0){
-		return ;
+void recursion(char c, int loopFor)
+{
+	if (loopFor < 0)
+	{
+		return;
 	}
 	m5.lock();
-	cout<<"ThreadID: "<<c<<" "<<buffer++<<endl;
-	recursion(c,--loopFor);
+	cout << "ThreadID: " << c << " " << buffer++ << endl;
+	recursion(c, --loopFor);
 	m5.unlock();
-	cout<<"Unlocked by thread "<<c<<endl;
+	cout << "Unlocked by thread " << c << endl;
 }
 
-// * lock guard  
+// * lock guard
 mutex m6;
-int buffer1=0;
-void task(const char* threadNumber, int loopFor){
-	lock_guard<mutex>lock(m6);
-	for(int i=0;i<loopFor;i++){
+int buffer1 = 0;
+void task(const char *threadNumber, int loopFor)
+{
+	lock_guard<mutex> lock(m6);
+	for (int i = 0; i < loopFor; i++)
+	{
 		buffer1++;
-		cout<<threadNumber<<buffer1<<endl;
+		cout << threadNumber << buffer1 << endl;
 	}
 }
 
 // * unique lock
 mutex m7;
-int buffer2=0;
-void task1(const char* threadNumber, int loopFor){
-	unique_lock<mutex>lock(m7,defer_lock); // does not call lock on mutex m7
-	for(int i=0;i<loopFor;i++){
+int buffer2 = 0;
+void task1(const char *threadNumber, int loopFor)
+{
+	unique_lock<mutex> lock(m7, defer_lock); // does not call lock on mutex m7
+	for (int i = 0; i < loopFor; i++)
+	{
 		buffer2++;
-		cout<<threadNumber<<buffer2<<endl;
+		cout << threadNumber << buffer2 << endl;
 	}
 }
 
 //* conditional variable
 mutex m8;
-long balance =0 ;
+long balance = 0;
 condition_variable cv;
-void addMoney1(int money){
+void addMoney1(int money)
+{
 	lock_guard<mutex> lg(m8);
-	balance+=money;
-	cout<<"Amount added current balance"<<balance<<endl;
+	balance += money;
+	cout << "Amount added current balance" << balance << endl;
 	cv.notify_one();
 }
 
-void withdrawMoney(int money){
+void withdrawMoney(int money)
+{
 	unique_lock<mutex> ul(m8); // waiting here , sleeping thread
-	cv.wait(ul,[]{ return (balance!=0)? true:false; }); // wait releases the mutex , when condition is met , the mutex is reacquired
-	if(balance >= money){
-		balance-=money;
-		cout<<"Amount deducted : "<<money<<endl;
-	}else{
-		cout<<"Amount cannot be detucted ,Current Balance is less than "<<money<<endl;
+	cv.wait(ul, []
+			{ return (balance != 0) ? true : false; }); // wait releases the mutex , when condition is met , the mutex is reacquired
+	if (balance >= money)
+	{
+		balance -= money;
+		cout << "Amount deducted : " << money << endl;
 	}
-	cout<<"Current Balance is: "<<balance<<endl;
+	else
+	{
+		cout << "Amount cannot be detucted ,Current Balance is less than " << money << endl;
+	}
+	cout << "Current Balance is: " << balance << endl;
 }
 
-
 //* Thread synchronization
-// ! Only one thread should access the critical section 
+// ! Only one thread should access the critical section
 mutex m9;
-int bankBalance=0;
-void addMoney2(int money){
+int bankBalance = 0;
+void addMoney2(int money)
+{
 	m9.lock();
-	bankBalance+=money; // critical section
+	bankBalance += money; // critical section
 	m9.unlock();
 }
 
-//* Promise and Future 
-void findOddSum(promise<ull> && OddSumPromise,ull start,ull end){
-	ull Oddsum=0;
-	for(ull i=0;i<=end;i++){
-		if(i&1){
-			Oddsum+=i;
+//* Promise and Future
+void findOddSum(promise<ull> &&OddSumPromise, ull start, ull end)
+{
+	ull Oddsum = 0;
+	for (ull i = 0; i <= end; i++)
+	{
+		if (i & 1)
+		{
+			Oddsum += i;
 		}
 	}
 	OddSumPromise.set_value(Oddsum);
 }
 
-// * async 
+// * async
 //? return the values
-ull findOdd2(ull start,ull end){
-	ull res=0;
-	for(ull i=0;i<=end;i++){
-		if(i&1){
-			res+=i;
+ull findOdd2(ull start, ull end)
+{
+	ull res = 0;
+	for (ull i = 0; i <= end; i++)
+	{
+		if (i & 1)
+		{
+			res += i;
 		}
 	}
 	return res;
@@ -480,65 +521,69 @@ deque<int> bufferqueue;
 condition_variable cond;
 bool done = false; // Flag to indicate when producer is done
 
-void producer(int val) {
-    while (val) {
-        unique_lock<mutex> locker(mu);
-        cond.wait(locker, []() { return bufferqueue.size() < maxBufferSize; });
-        bufferqueue.push_back(val);
-        cout << "Produced: " << val << endl;
-        val--;
-        locker.unlock();
-        cond.notify_one();
-    }
-    // Indicate that production is done
-    {
-        lock_guard<mutex> locker(mu);
-        done = true;
-    }
-    cond.notify_all();
+void producer(int val)
+{
+	while (val)
+	{
+		unique_lock<mutex> locker(mu);
+		cond.wait(locker, []()
+				  { return bufferqueue.size() < maxBufferSize; });
+		bufferqueue.push_back(val);
+		cout << "Produced: " << val << endl;
+		val--;
+		locker.unlock();
+		cond.notify_one();
+	}
+	// Indicate that production is done
+	{
+		lock_guard<mutex> locker(mu);
+		done = true;
+	}
+	cond.notify_all();
 }
 
-void consumer() {
-    while (true) {
-        unique_lock<mutex> locker(mu);
-        cond.wait(locker, []() { return !bufferqueue.empty() || done; });
-        if (!bufferqueue.empty()) {
-            int val = bufferqueue.back();
-            bufferqueue.pop_back();
-            cout << "Consumed: " << val << endl;
-        } else if (done) {
-            break; // Exit loop if producer is done and buffer is empty
-        }
-        locker.unlock();
-        cond.notify_one();
-    }
+void consumer()
+{
+	while (true)
+	{
+		unique_lock<mutex> locker(mu);
+		cond.wait(locker, []()
+				  { return !bufferqueue.empty() || done; });
+		if (!bufferqueue.empty())
+		{
+			int val = bufferqueue.back();
+			bufferqueue.pop_back();
+			cout << "Consumed: " << val << endl;
+		}
+		else if (done)
+		{
+			break; // Exit loop if producer is done and buffer is empty
+		}
+		locker.unlock();
+		cond.notify_one();
+	}
 }
-
-
-
-
 
 void solve()
 {
-	ull start=0,end=1900000000;
+	ull start = 0, end = 1900000000;
 	auto startTime = high_resolution_clock::now();
-	thread t1(findEven,start,end);
-	thread t2(findOdd,start,end);
-	t1.join(); 
+	thread t1(findEven, start, end);
+	thread t2(findOdd, start, end);
+	t1.join();
 	t2.join();
 	// findOdd(start,end);
 	// findEven(start,end);
 	auto stopTime = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>(stopTime-startTime);
-	cout<<"Oddsum:"<<oddSum<<endl;
-	cout<<"Evensum:"<<evenSum<<endl;
-	cout<<"Sec:"<<duration.count()/1000000<<endl;
-	cout<<endl;
+	auto duration = duration_cast<microseconds>(stopTime - startTime);
+	cout << "Oddsum:" << oddSum << endl;
+	cout << "Evensum:" << evenSum << endl;
+	cout << "Sec:" << duration.count() / 1000000 << endl;
+	cout << endl;
 
-	//Function pointers
-	thread t3(fun,3);
+	// Function pointers
+	thread t3(fun, 3);
 	t3.join();
-
 
 	// Lamda function
 	// thread t4([](int x){
@@ -557,90 +602,93 @@ void solve()
 	// thread t6(&Base::run,&b,1);
 	// t6.join();
 
-	//5. static member function
-	// thread t7(&Base::run,1);
-	// t7.join();
-	
+	// 5. static member function
+	//  thread t7(&Base::run,1);
+	//  t7.join();
 
-	thread t11(run,5);
-	cout<<"main()"<<endl;
+	thread t11(run, 5);
+	cout << "main()" << endl;
 	t11.join();
 	// Double join will result into program termination.
 	// terminate called after throwing an instance of 'std::system_error'
-	if(t11.joinable()){
+	if (t11.joinable())
+	{
 		t11.join();
 	}
-	if(t11.joinable()){
+	if (t11.joinable())
+	{
 		t11.detach();
 	}
 	// Always check before detaching a thread that it is joinable otherwise we may end up double detaching and double detach() will result into program termination.
-	cout<<"main() after"<<endl;
-	//this_thread::sleep_for(chrono::seconds(3));
-	// if waited ,thread will run 
+	cout << "main() after" << endl;
+	// this_thread::sleep_for(chrono::seconds(3));
+	//  if waited ,thread will run
 
-	cout<<"\n\n\n";
+	cout << "\n\n\n";
 
-	// Mutual Exclusion 
-	//Race condition is a situation where two or more threads/process happens to change a common data at the same time.
-	cout<<"          Mutex \n";
+	// Mutual Exclusion
+	// Race condition is a situation where two or more threads/process happens to change a common data at the same time.
+	cout << "          Mutex \n";
 
-    thread t12(addMoney);
+	thread t12(addMoney);
 	thread t13(addMoney);
 	t12.join();
 	t13.join();
-	cout<<myAmount<<endl;
+	cout << myAmount << endl;
 
-    cout<<endl<<"            Mutex trylock"<<endl;
+	cout << endl
+		 << "            Mutex trylock" << endl;
 	// Mutex trylock
 
 	thread t14(increaseTheCounter);
 	thread t15(increaseTheCounter);
 
-	t14.join(); 
+	t14.join();
 	t15.join();
-	cout<<"Counter could increase upto"<<counter<<endl;
+	cout << "Counter could increase upto" << counter << endl;
 
 	// * gives  different answer everytime because t14 will be busy incrementing the counter and while incrementing the lock may get thransferred to t15 as the function unlocks it and busy in incrementing i
 
 	thread t16(incrementXY, ref(X), ref(m2), "X ");
-    thread t17(incrementXY, ref(Y), ref(m3), "Y ");
-    thread t18(consumeXY);
-    t16.join();
-    t17.join();
-    t18.join();
-	
-	cout<<endl<<"           Timed Mutex \n\n";
-	thread t19(increment,1);
-	thread t20(increment,2);
-	t19.join(); 
-	t20.join();
-	cout<<myAmount2<<endl;
+	thread t17(incrementXY, ref(Y), ref(m3), "Y ");
+	thread t18(consumeXY);
+	t16.join();
+	t17.join();
+	t18.join();
 
-	cout<<"            Recursive Mutex"<<endl;
-	thread t21(recursion,'1',3);
-	thread t22(recursion,'2',3);
+	cout << endl
+		 << "           Timed Mutex \n\n";
+	thread t19(increment, 1);
+	thread t20(increment, 2);
+	t19.join();
+	t20.join();
+	cout << myAmount2 << endl;
+
+	cout << "            Recursive Mutex" << endl;
+	thread t21(recursion, '1', 3);
+	thread t22(recursion, '2', 3);
 	t21.join();
 	t22.join();
 
-	// * lock guard 
-	cout<<"\n\n       Lock guard \n\n";
-	thread t23(task,"T1 ",10);
-	thread t24(task,"T2 ",10);
+	// * lock guard
+	cout << "\n\n       Lock guard \n\n";
+	thread t23(task, "T1 ", 10);
+	thread t24(task, "T2 ", 10);
 	t23.join();
 	t24.join();
 
 	//* unique lock (defer_lock , try_to_lock , adopt_lock)
-    cout<<"\n\n       Unique lock \n\n";
-	thread t25(task1,"T1 ",10);
-	thread t26(task1,"T2 ",10);
+	cout << "\n\n       Unique lock \n\n";
+	thread t25(task1, "T1 ", 10);
+	thread t26(task1, "T2 ", 10);
 	t25.join();
 	t26.join();
 
-	// * conditional variable 
-	// ? used for synchronization of threads 
-	cout<<"\n\n         Conditional variable \n\n";
-	thread t27(withdrawMoney,500); // ! 600 --> Amount insufficient  
-	thread t28(addMoney1,500); 
+	// * conditional variable
+	// ? used for synchronization of threads
+	cout << "\n\n         Conditional variable \n\n";
+	thread t27(withdrawMoney, 500); // ! 600 --> Amount insufficient
+	thread t28(addMoney1, 500);
 	t27.join();
 	t28.join();
 
@@ -648,59 +696,58 @@ void solve()
 	// ? Give me , I give you back
 	// *maintain the order of lock and unlock because if you change the order both thread lock each other requirements , leaving infinite run
 
-	// * Thread Synchronization 
-    // ? very very rarely both thread may change value at the same time resulting in bank balance 200 or 100 .
-	cout<<"\n\n            Thread Synchronization\n\n";
-	thread t29(addMoney2,100);
-	thread t30(addMoney2,200); 
+	// * Thread Synchronization
+	// ? very very rarely both thread may change value at the same time resulting in bank balance 200 or 100 .
+	cout << "\n\n            Thread Synchronization\n\n";
+	thread t29(addMoney2, 100);
+	thread t30(addMoney2, 200);
 	t29.join();
 	t30.join();
-	cout<<"Final bank balance : "<<bankBalance<<endl;
+	cout << "Final bank balance : " << bankBalance << endl;
 
 	//* Promise and Future
-	cout<<"\n\n            Promise and Future\n\n";
+	cout << "\n\n            Promise and Future\n\n";
 	promise<ull> Oddsum;
-	future<ull>Oddfuture = Oddsum.get_future();
-	cout<<"Thread created "<<endl;
-	thread t31(findOddSum,move(Oddsum),start,end);
-	cout<<"Waiting for result"<<endl;
-	cout<<"Oddsum: "<<Oddfuture.get()<<endl;
-	cout<<"Completed"<<endl;
+	future<ull> Oddfuture = Oddsum.get_future();
+	cout << "Thread created " << endl;
+	thread t31(findOddSum, move(Oddsum), start, end);
+	cout << "Waiting for result" << endl;
+	cout << "Oddsum: " << Oddfuture.get() << endl;
+	cout << "Completed" << endl;
 	t31.join();
 
 	// * async
-    cout<<"\n\n            Async\n\n";
-	cout<<"ThreadID"<<this_thread::get_id()<<endl;
-	future<ull> Oddsum2 = async(launch::deferred,findOdd2,start,end); // launch ::async means new thread will be created , deferred will not create a new thread
-	cout<<"Waiting for result"<<endl;
-	cout<<"Oddsum: "<<Oddsum2.get()<<endl;
-	cout<<"Completed"<<endl;
+	cout << "\n\n            Async\n\n";
+	cout << "ThreadID" << this_thread::get_id() << endl;
+	future<ull> Oddsum2 = async(launch::deferred, findOdd2, start, end); // launch ::async means new thread will be created , deferred will not create a new thread
+	cout << "Waiting for result" << endl;
+	cout << "Oddsum: " << Oddsum2.get() << endl;
+	cout << "Completed" << endl;
 
-	// * Producer consumer 
-	cout<<"\n\n            Producer consumer\n\n";
-	thread t32(producer,10);
+	// * Producer consumer
+	cout << "\n\n            Producer consumer\n\n";
+	thread t32(producer, 10);
 	thread t33(consumer);
 	t32.join();
 	t33.join();
-   
-
 }
-
 
 // <--------------------I/O------------->
 
-int main(){
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+int main()
+{
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	srand(chrono::high_resolution_clock::now().time_since_epoch().count());
 #ifndef ONLINE_JUDGE
-  freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 #endif
-  int t=1;
-  //cin>>t;
-  while(t--){
-    solve();
-  }
-  return 0;
+	int t = 1;
+	// cin>>t;
+	while (t--)
+	{
+		solve();
+	}
+	return 0;
 }
